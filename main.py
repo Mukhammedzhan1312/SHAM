@@ -197,9 +197,9 @@ app.add_middleware(
 # MongoDB
 MONGO_URI = "mongodb://localhost:27017"
 client = AsyncIOMotorClient(MONGO_URI)
-db = client["university_db"]
+db = client["Students"]
 
-students_collection = db["students"]
+students_collection = db["data"]
 reports_collection = db["reports"]
 topics_collection = db["chat_topics"]   # ← новая коллекция для тем чата
 
