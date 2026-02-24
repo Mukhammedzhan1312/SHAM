@@ -111,3 +111,30 @@ class ChatTopic(SQLModel, table=True):
     class Config:
         # Это позволит корректно работать с данными, если они приходят как словари
         from_attributes = True
+
+
+from typing import Optional
+from sqlmodel import SQLModel, Field
+from sqlalchemy import Column, LargeBinary  # Нужен для хранения PDF
+
+class GuideSection(SQLModel, table=True):
+    __tablename__ = "guide_sections"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    key: str = Field(index=True, unique=True) # например, 'rules', 'contacts'
+    order: int = Field(default=0)
+    icon: Optional[str] = None
+    
+    title_ru: str
+    title_kz: Optional[str] = None
+    title_en: Optional[str] = None
+    
+    content_ru: Optional[str] = None
+    content_kz: Optional[str] = None
+    content_en: Optional[str] = None
+    
+    pdf_filename: Optional[str] = None
+    # Поле для хранения самого файла в базе данных (Postgres BYTEA)
+    pdf_data: Optional[bytes] = Field(default=None, sa_column=Column(LargeBinary))
+    
+    active: bool = Field(default=True)
