@@ -1,0 +1,1147 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: url('');
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    width: 380px;
+    height: 625px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+}
+
+.chat-header {
+    background: linear-gradient(135deg, #6C63FF, #5A52D1);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.chat-header .status {
+    display: flex;
+    align-items: center;
+}
+
+.chat-header .header-avatar {
+    width: 24px;
+    height: 24px;
+    background-color: #fff;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #333;
+    font-weight: bold;
+}
+
+.chat-header .bot-name {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.chat-header .status #availability {
+    margin-left: 8px;
+    font-size: 14px;
+    color: #ccc;
+    font-weight: normal;
+}
+
+.chat-header .settings {
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.settings-menu {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    padding: 10px;
+    z-index: 100;
+    width: 220px;
+}
+
+.dark-theme .settings-menu {
+    background-color: #2a2a2a;
+    border: 1px solid #ddd;
+    color: #fff;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.dark-theme .menu-item {
+    color: #fff;
+}
+
+.menu-item.whatsapp-btn {
+    cursor: pointer;
+    gap: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.menu-item.whatsapp-btn:hover {
+    background-color: #f5f5f5;
+}
+
+.dark-theme .menu-item.whatsapp-btn:hover {
+    background-color: #444;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #4CAF50;
+}
+
+input:checked+.slider:before {
+    transform: translateX(14px);
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    background-color: #f5f5f5;
+    overflow-y: auto;
+    position: relative;
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 15px;
+    position: relative;
+    overflow: visible;
+}
+
+.message-time {
+    font-size: 12px;
+    color: #888;
+    margin: 10px auto;
+    text-align: center;
+    background-color: #ddd;
+    padding: 4px 8px;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.message {
+    background-color: #FFAD88;
+    color: #000;
+    padding: 12px 18px;
+    border-radius: 18px 18px 4px 18px;
+    max-width: 75%;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 15px;
+    line-height: 1.4;
+    position: relative;
+}
+
+.message.received {
+    background-color: #ffffff;
+    color: #000;
+    border-radius: 18px 18px 18px 4px;
+    align-self: flex-start;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.message-container:hover .action-buttons {
+    display: flex;
+}
+
+.assistant-message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.assistant-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.assistant-name {
+    font-size: 0.75rem;
+    font-weight: normal;
+    line-height: 1rem;
+    color: rgb(104, 115, 125);
+    margin: 0px 0px 0px 3rem;
+}
+
+.assistant-message-wrapper {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+}
+
+.assistant-message-container:hover .action-buttons {
+    display: flex;
+}
+
+.assistant-avatar {
+    width: 24px;
+    height: 24px;
+    background-color: #ddd;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #333;
+}
+
+.assistant-message {
+    background-color: #f5f5f5;
+    color: #666;
+    padding: 12px 18px;
+    border-radius: 18px 18px 18px 4px;
+    max-width: 75%;
+    text-align: left;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.message img {
+    max-width: 100%;
+    border-radius: 15px;
+}
+
+.language-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.language-btn {
+    padding: 10px 15px;
+    background-color: #e6f0fa;
+    border: 1px solid #c4ddff;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1e3a8a;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.language-btn:hover {
+    background-color: #d1e3ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.topic-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    /* Убираем жесткое выравнивание вправо, если хотим "натуральный" вид */
+    justify-content: flex-start; 
+}
+
+.topic-btn {
+    padding: 8px 16px;
+    background-color: transparent;
+    border: 1px solid #1e3a8a;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1e3a8a;
+    text-align: center;
+    
+    /* ГЛАВНЫЕ ИЗМЕНЕНИЯ ТУТ: */
+    flex: 0 1 auto;      /* Кнопка не растягивается, а занимает место по контенту */
+    width: auto;         /* Ширина зависит от текста */
+    min-width: fit-content;
+    max-width: 100%;     /* Ограничиваем только шириной экрана */
+    
+    box-sizing: border-box;
+    white-space: nowrap; /* Чтобы текст внутри кнопки не переносился */
+}
+
+/* Если вы хотите, чтобы они всё равно были прижаты к правому краю, 
+   но шли "цепочкой", используйте: */
+.topic-selection {
+    justify-content: flex-end;
+}
+
+.topic-btn {
+    transition: all 0.2s ease;
+}
+
+.topic-btn:hover {
+    background-color: #1e3a8a;
+    color: #fff;
+}
+.topic-btn.long {
+    max-width: 100%;
+}
+
+.dark-theme .topic-btn {
+    background-color: transparent;
+    border: 1px solid #a3bffa;
+    color: #a3bffa;
+}
+
+.action-buttons {
+    display: none;
+    gap: 4px;
+    /* Промежуток между кнопками */
+    margin-top: 4px;
+    /* Отступ сверху от сообщения */
+    background-color: transparent;
+    /* Прозрачный фон */
+    padding: 0;
+    /* Убираем внутренние отступы */
+    border-radius: 0;
+    /* Убираем скругление контейнера */
+    align-self: flex-start;
+    /* Выравнивание по началу для сообщений бота */
+}
+
+.message-container .action-buttons {
+    align-self: flex-end;
+    /* Для отправленных сообщений выравнивание по правому краю */
+}
+
+.assistant-message-container .action-buttons {
+    margin-left: 32px;
+    /* Отступ слева для выравнивания с аватаром */
+}
+
+.action-btn {
+    padding: 3px;
+    /* Круглые кнопки с минимальными отступами */
+    width: 20px;
+    /* Фиксированный размер */
+    height: 20px;
+    /* Фиксированный размер */
+    background-color: transparent;
+    border: 1px solid #666;
+    /* Лёгкая граница */
+    border-radius: 50%;
+    /* Круглая форма */
+    cursor: pointer;
+    font-size: 12px;
+    /* Размер иконок */
+    color: #666;
+    /* Цвет иконок в светлой теме */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: #f0f0f0;
+    /* Эффект наведения в светлой теме */
+}
+
+.dark-theme .action-btn {
+    border: 1px solid #888;
+    color: #ccc;
+    /* Цвет иконок в тёмной теме */
+}
+
+.dark-theme .action-btn:hover {
+    background-color: #444;
+    /* Эффект наведения в тёмной теме */
+}
+
+.typing-indicator {
+    display: none;
+    padding: 8px 12px;
+    border-radius: 18px 18px 18px 4px;
+    max-width: 100px;
+    align-self: flex-start;
+    font-size: 14px;
+    margin-bottom: 15px;
+    margin-left: 32px;
+}
+
+.typing-indicator span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-right: 2px;
+    animation: blink 1.2s infinite;
+}
+
+.typing-indicator span:nth-child(1),
+.typing-indicator span:nth-child(2) {
+    background-color: #e0e0e0;
+}
+
+.typing-indicator span:nth-child(3) {
+    background-color: #666;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0%, 20% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.2;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    gap: 10px;
+}
+
+.chat-input img#attach-btn {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.chat-input input {
+    flex: 1;
+    border: 1px solid #1e3a8a;
+    outline: none;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 20px;
+    transition: border-color 0.3s ease;
+}
+
+.chat-input input::placeholder {
+    color: #999;
+}
+
+.chat-input input:focus {
+    border-color: #4CAF50;
+}
+
+.chat-input img#send-btn {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: none;
+}
+
+.chat-toggle {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: pulse 2s infinite ease-in-out;
+    background: linear-gradient(135deg, #6C63FF, #5A52D1);
+}
+
+.chat-toggle-img {
+    width: 30px;
+    height: 30px;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.dark-theme {
+    background: url('');
+}
+
+.dark-theme .chat-container {
+    background-color: #1e1e1e;
+}
+
+.dark-theme .chat-header {
+    background: linear-gradient(135deg, #4a4455, #3a3455);
+}
+
+.dark-theme .chat-messages {
+    background-color: #252525;
+}
+
+.dark-theme .message {
+    background-color: #FFAD88;
+    color: #000;
+}
+
+.dark-theme .message.received {
+    background-color: #333;
+    color: #fff;
+}
+
+.dark-theme .assistant-message {
+    background-color: #333;
+    color: #ccc;
+}
+
+.dark-theme .chat-input {
+    background-color: #1e1e1e;
+    border-top: 1px solid #444;
+}
+
+.dark-theme .chat-input input {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+.dark-theme .chat-input input::placeholder {
+    color: #888;
+}
+
+.dark-theme .language-btn {
+    background-color: #2a3b5a;
+    border: 1px solid #4a6db5;
+    color: #a3bffa;
+}
+
+.dark-theme .language-btn:hover {
+    background-color: #3b4e7a;
+}
+
+/* Стили для модального окна WhatsApp */
+.whatsapp-modal {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.whatsapp-modal-content {
+    background-color: #fff;
+    border-radius: 12px;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dark-theme .whatsapp-modal-content {
+    background-color: #252525;
+    color: #fff;
+}
+
+.whatsapp-modal-close {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+}
+
+.dark-theme .whatsapp-modal-close {
+    color: #ccc;
+}
+
+.whatsapp-modal-close:hover {
+    color: #000;
+}
+
+.dark-theme .whatsapp-modal-close:hover {
+    color: #fff;
+}
+
+.whatsapp-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.whatsapp-modal-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.whatsapp-modal-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.whatsapp-modal-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.dark-theme .whatsapp-modal-text {
+    color: #ccc;
+}
+
+.whatsapp-modal-instruction {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.dark-theme .whatsapp-modal-instruction {
+    color: #ccc;
+}
+
+.whatsapp-modal-qr {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    display: block;
+}
+
+.whatsapp-modal-footer {
+    font-size: 14px;
+    color: #888;
+}
+
+.dark-theme .whatsapp-modal-footer {
+    color: #aaa;
+}
+
+
+
+
+/* Красивая карточка студента */
+.student-card-container {
+    max-width: 100%;
+}
+
+.student-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    margin-bottom: 15px;
+}
+
+.student-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 15px;
+}
+
+.student-avatar {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.student-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+
+.student-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.info-item {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.gpa-badge {
+    padding: 6px 12px;
+    border-radius: 25px;
+    font-weight: bold;
+}
+
+.gpa-excellent {
+    background: #4ade80;
+    color: #065f46;
+}
+
+.gpa-good {
+    background: #fbbf24;
+    color: #92400e;
+}
+
+.gpa-average {
+    background: #f59e0b;
+    color: #92400e;
+}
+
+.gpa-poor {
+    background: #ef4444;
+    color: #991b1b;
+}
+
+.subjects-table h4 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+}
+
+.subjects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.subject-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.subject-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.subject-score {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.subject-grade {
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 13px;
+    min-width: 35px;
+    text-align: center;
+}
+
+.grade-excellent {
+    background: #4ade80;
+    color: #065f46;
+}
+
+.grade-good {
+    background: #fbbf24;
+    color: #92400e;
+}
+
+.grade-average {
+    background: #f59e0b;
+    color: #92400e;
+}
+
+.grade-poor {
+    background: #f97316;
+    color: #ea580c;
+}
+
+.grade-fail {
+    background: #ef4444;
+    color: #991b1b;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.student-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.action-btn-small {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s;
+}
+
+.action-btn-small:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Тёмная тема адаптация */
+.dark-theme .student-card {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+}
+
+
+/* Красивая анимация для расширения чата */
+
+/* Расширенное состояние — по центру, с красивой анимацией */
+.chat-container.expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    width: 840px;
+    /* чуть шире, как у Grok в 2025–2026 */
+    max-width: 94vw;
+    /* адаптивно на узких экранах */
+    height: 92vh;
+    max-height: 96vh;
+    border-radius: 24px;
+    /* более скруглённые углы — модно */
+    box-shadow:
+        0 30px 100px rgba(0, 0, 0, 0.5),
+        0 10px 40px rgba(0, 0, 0, 0.3);
+    /* двойная тень для объёма */
+    z-index: 9999;
+    overflow: hidden;
+    background: var(--chat-bg, #ffffff);
+    /* или #0f0f17 в тёмной теме */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* лёгкая обводка в тёмной теме */
+
+    /* Плавная анимация появления и исчезновения */
+    transition:
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        /* overshoot — пружинка */
+        opacity 0.4s ease,
+        width 0.4s ease,
+        height 0.4s ease,
+        border-radius 0.4s ease;
+    opacity: 1;
+}
+
+/* Начальное состояние перед анимацией (когда ещё не expanded) */
+.chat-container {
+    transition:
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.4s ease,
+        width 0.4s ease,
+        height 0.4s ease,
+        border-radius 0.4s ease;
+}
+
+.expand-btn {
+    font-size: 18px;
+    cursor: pointer;
+
+}
+
+
+#menu-btn, #send-btn {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 1;
+  transform: scale(1);
+}
+
+#menu-btn.hidden, #send-btn.hidden {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+
+
+
+
+
+/* Когда чат свёрнут — он маленький и в углу */
+.chat-container:not(.expanded) {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Тёмный фон за чатом (очень атмосферно) */
+.chat-container.expanded::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    /* размытие фона — премиум-эффект */
+    -webkit-backdrop-filter: blur(8px);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* Показываем фон только когда expanded */
+.chat-container.expanded::before {
+    opacity: 1;
+}
+
+/* Увеличиваем высоту области сообщений */
+.chat-container.expanded .chat-messages {
+    height: calc(92vh - 140px);
+    max-height: calc(96vh - 140px);
+}
+
+
+.header-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden; /* Чтобы картинка обрезалась по кругу */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0; /* Фоновый цвет, если картинка прозрачная */
+}
+
+.header-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Картинка заполнит весь круг без искажений */
+}
+
+/* Стилизация скроллбара под дизайн чата */
+#chat-messages::-webkit-scrollbar {
+    width: 6px; /* очень тонкий */
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background: transparent; /* прозрачный фон */
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2); /* полупрозрачный бегунок */
+    border-radius: 10px;
+}
+
+/* Для темной темы */
+.dark-theme #chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 900px) {
+    .chat-container.expanded {
+        width: 96vw;
+        height: 94vh;
+        border-radius: 16px;
+    }
+}
+
+/* Путеводитель — сетка карточек */
+.guide-grid {
+  width: 100%;
+}
+
+/* На мобильных (< 768px) всегда 2 колонки максимум */
+@media (max-width: 767px) {
+  .guide-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  .guide-grid > div {
+    font-size: 14px !important;
+    padding: 14px !important;
+  }
+}
+
+/* На планшетах и ноутбуках в обычном режиме — 2 колонки */
+@media (min-width: 768px) and (max-width: 1400px) {
+  .guide-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Развёрнутый чат + большой экран — 4 колонки */
+.chat-container.expanded .guide-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+}
+
+/* Очень большой экран (>1400px) в expanded — строго 4 колонки */
+@media (min-width: 1401px) {
+  .chat-container.expanded .guide-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+
+/* Стили для карточек в путеводителе */
+/* Контейнер для анимации */
+.message-wrapper {
+    display: flex;
+    align-items: flex-end;
+  
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    /* padding: 12px 16px; */
+    background: #f1f1f1; /* цвет фона как у облачка сообщения */
+    border-radius: 15px;
+    width: fit-content;
+    margin-bottom: 10px;
+}
+
+/* Сами точки */
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    background: #707070;
+    border-radius: 50%;
+    animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing-bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* Для темной темы (если есть) */
+.dark-theme .typing-indicator {
+    background: #3a3a3a;
+}
+.dark-theme .typing-dot {
+    background: #bbb;
+}
+
+
+

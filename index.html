@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentPerf Chat — Анализ успеваемости</title>
+    <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+    <main>
+        <div class="chat-toggle" id="chat-toggle">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/chat.png" alt="Chat Icon" class="chat-toggle-img" />
+        </div>
+
+        <div class="chat-container" id="chat-container" style="display: none;">
+            <div class="chat-header">
+                <div class="status">
+                    <div class="header-avatar">
+                        <img src="img/WhatsApp Image 2026-02-20 at 13.13.10.jpeg" alt="Bot Avatar" id="bot-logo">
+                    </div>
+                    <span class="bot-name">SHAM</span>
+                    <span id="availability">24/7</span>
+                </div>
+                <div class="settings">
+                    <div class="expand-btn" id="expand-btn">⤡</div>
+                    <span class="settings-dots" id="settings-trigger" style="cursor:pointer; padding: 0 5px;">⋮</span>
+                </div>
+
+                <div class="settings-menu" id="settings-menu" style="display: none;">
+                    <div class="menu-item">
+                        <span>🌙 Темный режим</span>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="menu-item whatsapp-btn" id="whatsapp-btn">
+                        <img src="https://img.icons8.com/color/24/000000/whatsapp.png" alt="WhatsApp Icon">
+                        <span>WhatsApp</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+            </div>
+
+            <div id="expand-chat-popup" style="position: absolute; top: 70px; left: 10px; right: 10px; z-index: 1000;
+                        background: rgba(30,41,59,0.95); backdrop-filter: blur(10px);
+                        color: white; padding: 16px; border-radius: 16px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                        display: none; font-size: 14px;
+                        border: 1px solid #475569;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">🖥️</span>
+                    <strong>Развернуть чат на весь экран?</strong>
+                </div>
+                <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: flex-end;">
+                    <button id="popup-close-btn"
+                        style="background: transparent; color: #94a3b8; border: 1px solid #475569; border-radius: 8px; cursor: pointer; padding: 5px 10px;">Закрыть</button>
+                    <button id="popup-expand-btn"
+                        style="background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; padding: 5px 15px;">Развернуть</button>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <img src="https://img.icons8.com/ios-glyphs/30/000000/attach.png" alt="Attach" id="attach-btn"
+                    style="cursor: pointer;">
+                <input type="text" id="message-input" placeholder="Напишите вопрос...">
+
+                <img src="https://img.icons8.com/ios-glyphs/30/000000/menu.png" alt="Menu" id="menu-btn"
+                    style="cursor: pointer;">
+                <img src="https://img.icons8.com/ios-glyphs/30/000000/paper-plane.png" alt="Send" id="send-btn"
+                    style="display: none; cursor: pointer;">
+
+                <input type="file" id="file-input" style="display: none;" accept=".xlsx,.xls">
+            </div>
+        </div>
+
+        <div class="whatsapp-modal" id="whatsapp-modal" style="display: none;">
+            <div class="whatsapp-modal-content">
+                <span class="whatsapp-modal-close"
+                    onclick="document.getElementById('whatsapp-modal').style.display='none'">&times;</span>
+                <div class="whatsapp-modal-header">
+                    <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="WhatsApp Icon">
+                    <h2>WhatsApp</h2>
+                </div>
+                <p>Отсканируйте QR-код для связи с нами.</p>
+                <img src="~/img/whatsapp_qr.jpg" alt="QR Code" class="whatsapp-modal-qr">
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="site.js"></script>
+</body>
+
+</html>
