@@ -27,49 +27,49 @@ let popupAlreadyShown = false;
 // ────────────────────────────────────────────────
 // 2. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ (DOMContentLoaded)
 // ────────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", () => {
-  // Восстановление сообщений
-  // const saved = JSON.parse(localStorage.getItem("chatMessages") || "[]");
-  // Восстанавливаем сообщения (внутри DOMContentLoaded)
-  saved.forEach((msg) => {
-    const c = document.createElement("div");
-    c.classList.add("message-container");
-    const m = document.createElement("div");
-    m.classList.add("message", msg.type === "received" ? "received" : "");
+// document.addEventListener("DOMContentLoaded", () => {
+//   // Восстановление сообщений
+//   // const saved = JSON.parse(localStorage.getItem("chatMessages") || "[]");
+//   // Восстанавливаем сообщения (внутри DOMContentLoaded)
+//   saved.forEach((msg) => {
+//     const c = document.createElement("div");
+//     c.classList.add("message-container");
+//     const m = document.createElement("div");
+//     m.classList.add("message", msg.type === "received" ? "received" : "");
 
-    if (msg.isImage) {
-      const img = document.createElement("img");
-      img.src = msg.text;
-      m.appendChild(img);
-    } else {
-      m.innerHTML = msg.text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-    }
+//     if (msg.isImage) {
+//       const img = document.createElement("img");
+//       img.src = msg.text;
+//       m.appendChild(img);
+//     } else {
+//       m.innerHTML = msg.text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+//     }
 
-    c.appendChild(m);
-    chatMessages.appendChild(c);
-  });
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+//     c.appendChild(m);
+//     chatMessages.appendChild(c);
+//   });
+//   chatMessages.scrollTop = chatMessages.scrollHeight;
 
-  // Тема
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark-theme");
-    chatContainer.classList.add("dark-theme");
-    themeToggle.checked = true;
-  }
+//   // Тема
+//   if (localStorage.getItem("theme") === "dark") {
+//     document.body.classList.add("dark-theme");
+//     chatContainer.classList.add("dark-theme");
+//     themeToggle.checked = true;
+//   }
 
-  // Проверка языка
-  selectedLanguage = localStorage.getItem("language");
-  if (!selectedLanguage || !["kz", "ru", "en"].includes(selectedLanguage)) {
-    localStorage.removeItem("language");
-    showLanguageSelection();
-  } else {
-    updatePlaceholder();
-    showGreeting();
-    showTopicSelection();
-  }
+//   // Проверка языка
+//   selectedLanguage = localStorage.getItem("language");
+//   if (!selectedLanguage || !["kz", "ru", "en"].includes(selectedLanguage)) {
+//     localStorage.removeItem("language");
+//     showLanguageSelection();
+//   } else {
+//     updatePlaceholder();
+//     showGreeting();
+//     showTopicSelection();
+//   }
 
-  updateInputButtons();
-});
+//   updateInputButtons();
+// });
 
 // ────────────────────────────────────────────────
 // 3. БАЗОВЫЕ ФУНКЦИИ ИНТЕРФЕЙСА (UI)
@@ -1101,76 +1101,226 @@ async function fetchCourseAnalysis(courseText) {
     }
 
     // Цвета и форматирование GPA (шкала 0.0–4.0)
-    const avgGpa = Number(stats.avg_gpa || 0);
-    const gpaColor = 
-      avgGpa >= 3.0 ? "#34D399" : 
-      avgGpa >= 2.0 ? "#FBBF24" : 
-      "#FF6B6B";
+   const avgGpa = Number(stats.avg_gpa || 0);
 
-    const riskColor = stats.at_risk > 0 ? "#FF6B6B" : "#34D399";
+const gpaState =
+  avgGpa >= 3.0 ? "good" :
+  avgGpa >= 2.0 ? "warn" :
+  "bad";
 
-    // Красивая карточка статистики
-    let statsReply = `
-<div style="background: linear-gradient(135deg, #6C63FF 0%, #4834D4 100%); 
-            color: white; padding: 24px; border-radius: 20px; 
-            margin: 16px 0; box-shadow: 0 12px 48px rgba(108,99,255,0.35);">
+const riskState = stats.at_risk > 0 ? "bad" : "good";
 
-  <div style="display: flex; align-items: center; margin-bottom: 24px;">
-    <span style="font-size: 40px; margin-right: 20px;">📈</span>
-    <h3 style="margin: 0; font-size: 26px;">Анализ курса ${courseText}</h3>
-  </div>
+let statsReply = `
+<div class="ai-analytics-wrapper">
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; margin-bottom: 28px;">
-    <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.12); border-radius: 16px;">
-      <div style="font-size: 15px; opacity: 0.9; margin-bottom: 8px;">Студентов</div>
-      <div style="font-size: 42px; font-weight: bold;">${stats.total_students}</div>
-    </div>
+<style>
+.ai-analytics-wrapper * {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
 
-    <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.12); border-radius: 16px;">
-      <div style="font-size: 15px; opacity: 0.9; margin-bottom: 8px;">Средний GPA</div>
-      <div style="font-size: 42px; font-weight: bold; color: ${gpaColor}">
-        ${avgGpa.toFixed(2)}
+.ai-analytics-card {
+  background: linear-gradient(135deg, #1f1f3a 0%, #2c2f70 100%);
+  border-radius: 24px;
+  padding: 28px;
+  color: #ffffff;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  backdrop-filter: blur(14px);
+  transition: all 0.25s ease;
+  margin: 20px 0;
+}
+
+.ai-analytics-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+}
+
+.ai-analytics-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.ai-analytics-icon {
+  font-size: 42px;
+}
+
+.ai-analytics-title {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.ai-analytics-subtitle {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.ai-analytics-grid {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.ai-analytics-grid-primary {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.ai-analytics-grid-secondary {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.ai-analytics-metric {
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.08);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.ai-analytics-metric:hover {
+  background: rgba(255,255,255,0.14);
+}
+
+.ai-analytics-label {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+
+.ai-analytics-value {
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.ai-analytics-value-good {
+  color: #34D399;
+}
+
+.ai-analytics-value-warn {
+  color: #FBBF24;
+}
+
+.ai-analytics-value-bad {
+  color: #FF6B6B;
+}
+
+.ai-analytics-alert {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ai-analytics-alert-good {
+  background: rgba(52,211,153,0.18);
+  color: #34D399;
+}
+
+.ai-analytics-alert-bad {
+  background: rgba(255,107,107,0.18);
+  color: #FF6B6B;
+}
+
+.ai-analytics-footer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.ai-analytics-btn {
+  padding: 14px 38px;
+  background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(124,58,237,0.4);
+}
+
+.ai-analytics-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(124,58,237,0.6);
+}
+
+.ai-analytics-btn:active {
+  transform: translateY(0);
+}
+</style>
+
+<div class="ai-analytics-card">
+
+  <div class="ai-analytics-header">
+    <div class="ai-analytics-icon">📊</div>
+    <div>
+      <div class="ai-analytics-title">
+        Анализ курса ${courseText}
+      </div>
+      <div class="ai-analytics-subtitle">
+        Академическая статистика
       </div>
     </div>
   </div>
 
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-    <div style="text-align: center; padding: 20px; background: rgba(255,255,255,0.08); border-radius: 16px;">
-      <div style="font-size: 15px; opacity: 0.9; margin-bottom: 8px;">Успеваемость (GPA ≥ 2.0)</div>
-      <div style="font-size: 36px; font-weight: bold; color: #34D399;">
+  <div class="ai-analytics-grid ai-analytics-grid-primary">
+    
+    <div class="ai-analytics-metric">
+      <div class="ai-analytics-label">Студентов</div>
+      <div class="ai-analytics-value">
+        ${stats.total_students}
+      </div>
+    </div>
+
+    <div class="ai-analytics-metric">
+      <div class="ai-analytics-label">Средний GPA</div>
+      <div class="ai-analytics-value ai-analytics-value-${gpaState}">
+        ${avgGpa.toFixed(2)}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ai-analytics-grid ai-analytics-grid-secondary">
+
+    <div class="ai-analytics-metric">
+      <div class="ai-analytics-label">Успеваемость (GPA ≥ 2.0)</div>
+      <div class="ai-analytics-value ai-analytics-value-good">
         ${stats.success_rate?.toFixed(1) || 0}%
       </div>
     </div>
 
-    <div style="text-align: center; padding: 20px; background: rgba(255,255,255,0.08); border-radius: 16px;">
-      <div style="font-size: 15px; opacity: 0.9; margin-bottom: 8px;">Студентов под риском</div>
-      <div style="font-size: 36px; font-weight: bold; color: ${riskColor}">
+    <div class="ai-analytics-metric">
+      <div class="ai-analytics-label">Студентов под риском</div>
+      <div class="ai-analytics-value ai-analytics-value-${riskState}">
         ${stats.at_risk} (${stats.at_risk_percent?.toFixed(1) || 0}%)
       </div>
     </div>
+
   </div>
 
-  ${stats.at_risk > 0 ? `
-  <div style="margin-top: 24px; padding: 16px; background: rgba(255,107,107,0.2); 
-              border-radius: 12px; text-align: center; font-size: 15px;">
-    ⚠️ Внимание: ${stats.at_risk} студент(ов) в зоне риска (GPA < 1.7 или статус не "Полный")
-  </div>` : `
-  <div style="margin-top: 24px; padding: 16px; background: rgba(52,211,153,0.2); 
-              border-radius: 12px; text-align: center; font-size: 15px;">
-    🎉 Отличные показатели! Курс в хорошей форме
-  </div>`}
+  ${
+    stats.at_risk > 0
+      ? `<div class="ai-analytics-alert ai-analytics-alert-bad">
+           ⚠ ${stats.at_risk} студент(ов) в зоне риска (GPA &lt; 1.7 или статус не "Полный")
+         </div>`
+      : `<div class="ai-analytics-alert ai-analytics-alert-good">
+           🎉 Отличные показатели! Курс в хорошей форме
+         </div>`
+  }
 
-  <!-- Кнопка подробного списка -->
-  <div style="margin-top: 32px; text-align: center;">
-    <button id="show-course-students-${courseValue}"
-            style="padding: 16px 40px; background: #7C3AED; color: white; 
-                   border: none; border-radius: 12px; cursor: pointer; 
-                   font-weight: bold; font-size: 17px; transition: all 0.2s; 
-                   box-shadow: 0 4px 12px rgba(124,58,237,0.4);">
+  <div class="ai-analytics-footer">
+    <button id="show-course-students-${courseValue}" class="ai-analytics-btn">
       📋 Показать список студентов
     </button>
   </div>
-</div>`;
+
+</div>
+</div>
+`;
 
     addReceivedMessage(statsReply);
 
