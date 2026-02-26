@@ -497,6 +497,7 @@ async function selectTopic(title, action, hasSubtopics) {
 
   addReceivedMessage(guideReply);
   showTyping();
+  
 
   try {
     const res = await axios.get(`${API_BASE_URL}/api/guide_sections`);
@@ -2064,13 +2065,74 @@ async function finishForecast(input) {
 // ────────────────────────────────────────────────
 async function queryAiAssistant(question) {
   showTyping();
+
   try {
-    const OPENROUTER_API_KEY =
-      "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";
-    const lang =
-      { kz: "казахский", ru: "русский", en: "английский" }[selectedLanguage] ||
-      "русский";
-    const systemPrompt = `Ты — SHAM AI, ассистент университета. Язык: ${lang}... (и другие правила)`;
+    // Твой реальный ключ OpenRouter
+    const OPENROUTER_API_KEY = "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";
+
+    // Язык пользователя
+    const langMap = { kz: "казахский", ru: "русский", en: "английский" };
+    const lang = langMap[selectedLanguage] || "русский";
+
+    // Системный промпт (тот, что ты указал — без изменений)
+    const systemPrompt = `Ты — SHAM AI, супер-полезный ассистент ТОЛЬКО для студентов и преподавателей университета.
+
+Твоя задача — помогать с:
+- успеваемостью, GPA, оценками, дисциплинами
+- поиском студентов
+- анализом курсов и групп
+- путеводителем по университету (Оңай карта, регистрация, стипендии, общежитие и т.д.)
+- мотивацией и советами по учёбе
+
+СТРОГИЕ ПРАВИЛА (ВЫПОЛНЯЙ ВСЕГДА):
+
+1. Отвечай ИСКЛЮЧИТЕЛЬНО на языке пользователя: сейчас это ${lang}.  
+   НИКОГДА не смешивай языки!
+
+2. Оставайся СТРОГО в теме университета.  
+   Если вопрос совсем не по теме — отвечай вежливо:  
+   "Извини, я помогаю только по студенческим и университетским вопросам 😊  
+   Задай что-нибудь про учёбу, оценки, курсы или Путеводитель!"
+
+3. Если вопрос требует реальных данных из базы (GPA, оценки, конкретный студент, дисциплина, курс, группа):  
+   - НИКОГДА НЕ ПРИДУМЫВАЙ цифры и факты!  
+   - Отвечай ВСЕГДА ТОЛЬКО так:  
+     "Я не вижу твоих данных в чате. используй функции бота и там вам показываеть реальные данный:  
+     • Поиск студента  
+     • Анализ по дисциплине  
+     • Анализ по курсу  
+     • Сравнение"  
+   - После этого ОБЯЗАТЕЛЬНО добавь вопрос:  
+     "Хочешь вернуться в главное меню и выбрать нужную функцию? 😊"  
+   - Если пользователь ответит "да", "хочу", "покажи меню", "меню", "вернись в меню" или что-то подобное — В ОБЯЗАТЕЛЬНОМ ПОРЯДКЕ ответь ТОЛЬКО:  
+     "Возвращаю в главное меню..."  
+     и добавь команду для фронта: [SHOW_MAIN_MENU]  
+     Больше ничего не пиши!
+
+4. Если вопрос про процедуры университета (Оңай карта, стипендия, регистрация, общежитие, Карта кампуса ну если спрашиваеть какойта здания или корпус например как ГУК НК и т.д.):  
+   - Дай КРАТКИЙ и правильный ответ  
+   - ОБЯЗАТЕЛЬНО предложи открыть раздел Путеводителя в формате:  
+     [BUTTON:Открыть раздел «Название»|key_razdela]  
+   Примеры ключей (используй ТОЛЬКО эти!):  
+     - Оңай карта → onay_student_transport_card  
+     - Регистрация на курс → registratsiya_kurs  
+     - Стипендии и гранты → stipendii_granty  
+     - Общежитие → obshezhitie  
+     - Расписание → raspisanie  
+     - Справки и документы → spravki_dokumenty
+     - Карта кампуса → campus_map  
+   - Никогда не пиши ключ в обычном тексте! Только внутри [BUTTON:...|key]
+
+5. Стиль общения:
+   - Дружелюбный, поддерживающий, мотивирующий
+   - Краткий, но с нужными деталями
+   - Всегда заканчивай вопросом или предложением: "Чем ещё помочь? 😊" или "Хочешь открыть раздел?"
+   - Используй эмодзи 😊📚🔥🎓💪
+
+6. Никогда не ругайся, не обижайся, не выходи за рамки темы.
+
+Текущий язык: ${lang} — отвечай ТОЛЬКО на нём!
+Ты — лучший помощник студента! 🚀`;
 
     const res = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
@@ -2078,26 +2140,68 @@ async function queryAiAssistant(question) {
         model: "arcee-ai/trinity-large-preview:free",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: question },
+          { role: "user", content: question }
         ],
         temperature: 0.7,
+        max_tokens: 800
       },
       {
         headers: {
-          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+          "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
+          "HTTP-Referer": "http://localhost:5502",
+          "X-Title": "StudentPerf AI Assistant"
         },
-      },
+        timeout: 30000
+      }
     );
 
     let aiText = res.data.choices[0].message.content.trim();
+
+    // Обработка кнопок [BUTTON:Текст|key]
+    const buttonRegex = /\[BUTTON:(.+?)\|(.+?)\]/g;
+    let buttonsHtml = "";
+
+    aiText = aiText.replace(buttonRegex, (match, btnText, key) => {
+      buttonsHtml += `
+        <button 
+          onclick="openGuideSection('${key.trim()}')"
+          style="margin: 8px 4px; padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold;">
+          ${btnText.trim()} →
+        </button>
+      `;
+      return ""; // убираем кнопку из текста
+    });
+
     addReceivedMessage(aiText);
-    // Пример: если ответил AI, предложи варианты
-    addQuickReplies(["Вернуться в меню", "Показать мой GPA", "Помощь"]);
+
+    // Если есть кнопки — добавляем их отдельным сообщением
+    if (buttonsHtml) {
+      addReceivedMessage(`
+        <div style="margin-top: 12px; text-align: center;">
+          ${buttonsHtml}
+        </div>
+      `);
+    }
+
   } catch (err) {
-    addReceivedMessage("Ошибка AI 😔");
+    console.error("OpenRouter ошибка:", err);
+
+    let msg = "Не удалось получить ответ от AI 😔";
+    if (err.response?.status === 404) msg += "<br>404 — неверная модель или endpoint";
+    if (err.response?.status === 401) msg += "<br>401 — неверный API-ключ";
+    if (err.response?.status === 429) msg += "<br>429 — лимит запросов, подожди";
+
+    addReceivedMessage(`
+<div style="background: #1E1E2E; color: #FCA5A5; padding: 24px; border-radius: 16px; text-align: center;">
+  <span style="font-size: 40px; display: block; margin-bottom: 16px;">⚠️</span>
+  ${msg}<br>
+  Проверь ключ и модель на openrouter.ai
+</div>`);
   }
+
   hideTyping();
+  startInactivityTimer();
 }
 
 // ────────────────────────────────────────────────
@@ -2237,7 +2341,7 @@ async function fetchGuideContent(key, title) {
     openBtn.style.cssText = `
       flex: 1;
       min-width: 180px;
-      padding: 14px 24px;
+      padding: 14px 24px;                                                                                                 
       background: linear-gradient(90deg, #7C3AED, #A78BFA);
       color: white;
       border: none;
