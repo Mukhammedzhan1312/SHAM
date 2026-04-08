@@ -99,7 +99,7 @@ class ChatTopic(SQLModel, table=True):
     title_en: Optional[str] = None
     
     # "order" — зарезервированное слово в SQL, но в коде пишем так
-    order: int = Field(default=0, sa_column_kwargs={"name": "sort_order"})
+    order: int = Field(default=0, sa_column_kwargs={"name": "sort_order"}) 
     
     active: bool = Field(default=True)
     has_subtopics: bool = Field(default=False)
